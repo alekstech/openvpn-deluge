@@ -3,7 +3,8 @@ version: '3.4'
 services:
   vpn:
 #    container_name: vpn
-    image: dperson/openvpn-client
+#    image: dperson/openvpn-client
+    build: ./openvpn
     # cap_add, security_opt, and volume required for the image to function
     cap_add:
       - net_admin
