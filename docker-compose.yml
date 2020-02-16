@@ -2,10 +2,8 @@ version: '3.4'
 
 services:
   vpn:
-#    container_name: vpn
-#    image: dperson/openvpn-client
+    container_name: vpn
     build: ./openvpn
-    # cap_add, security_opt, and volume required for the image to function
     cap_add:
       - net_admin
     environment:
@@ -31,14 +29,8 @@ services:
         target: /vpn
     ports:
       - "8112:8112"
-#      - "58846:58846"
+      - "58846:58846"
       - "58946:58946"
-  # Put .ovpn configuration file in the /vpn directory (in "volumes:" above or
-  # launch using the command line arguments, IE pick one:
-  #  - ./vpn:/vpn
-  # command: 'server;user;password[;port]'
-
-  # Replace "service1" with and image with an actual service you want to run
 
   deluge:
     container_name: deluge
@@ -54,8 +46,6 @@ services:
         source: d:/Github/openvpn-deluge/deluge/bind-mounts/deluge
         target: /home/user/.config/deluge
     network_mode: "service:vpn"
-    # deluge shares the network stack of vpn. The service can by reached using
-    # the name of the service as a hostname.
 
 networks:
   default:

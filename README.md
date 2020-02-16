@@ -9,12 +9,12 @@ This is a two-container project.
 ### 1. Set up bind mounts
 
 Both containers require hard drive access for data storage. Make sure that these four folders exist in your file system.
-- d:/Github/openvpn-deluge/openvpn/bind-mounts/net
-- d:/Github/openvpn-deluge/openvpn/bind-mounts/vpn
-- d:/media/
-- d:/Github/openvpn-deluge/deluge/bind-mounts/deluge
+- d:/Github/openvpn-deluge/openvpn/bind-mounts/vpn  - where VPN config and credentials will be stored
+- d:/Github/openvpn-deluge/openvpn/bind-mounts/net - used by a network device driver
+- d:/media/ - Deluge will store downloaded files here
+- d:/Github/openvpn-deluge/deluge/bind-mounts/deluge - for Deluge to store its config in
 
-You can change them to any other location by editing `docker-compose.yml`.
+You can change any of these paths to any other location by editing `docker-compose.yml`.
 
 On Windows, you will want to make sure that the drive where your folders are located is available to Docker - see Docker > Settings > Resources > File sharing.
 
@@ -39,7 +39,7 @@ myvpnpassword
 ```
 
 
-If your file is called `vpn.auth`, you can edit the line in `client.openvpn` to be:
+Assuming your file is called `vpn.auth`, you can edit the line in `client.openvpn` to be:
 ```
 auth-user-pass /vpn/vpn.auth
 ```
@@ -51,6 +51,8 @@ Run `docker-compose up`.
 ### 4. Run Deluge
 
 Visit [localhost:8112](localhost:8112) in your browser. You can change the port by editing `docker.compose.yml`.
+
+Deluge will prompt you for a password. The default password is "deluge".
 
 To check that Deluge connects via the VPN, you may want to use [ipMagnet](http://ipmagnet.services.cbcdn.com/) or a similar service.
 
