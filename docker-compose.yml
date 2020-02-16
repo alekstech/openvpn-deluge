@@ -1,0 +1,60 @@
+version: '3.4'
+
+services:
+  vpn:
+#    container_name: vpn
+    image: dperson/openvpn-client
+    # cap_add, security_opt, and volume required for the image to function
+    cap_add:
+      - net_admin
+    environment:
+      TZ: 'EST5EDT'
+    networks:
+      - default
+    read_only: true
+    tmpfs:
+      - /run
+      - /tmp
+    restart: unless-stopped
+    dns: 8.8.8.8
+    security_opt:
+      - label:disable
+    stdin_open: true
+    tty: true
+    volumes:
+      - type: bind
+        source: d:/Github/openvpn-deluge/openvpn/bind-mounts/net
+        target: /dev/net:z
+      - type: bind
+        source: d:/Github/openvpn-deluge/openvpn/bind-mounts/vpn
+        target: /vpn
+    ports:
+      - "8112:8112"
+#      - "58846:58846"
+      - "58946:58946"
+  # Put .ovpn configuration file in the /vpn directory (in "volumes:" above or
+  # launch using the command line arguments, IE pick one:
+  #  - ./vpn:/vpn
+  # command: 'server;user;password[;port]'
+
+  # Replace "service1" with and image with an actual service you want to run
+
+  deluge:
+    container_name: deluge
+    build: ./deluge
+    stdin_open: true
+    tty: true
+    restart: always
+    volumes:
+      - type: bind
+        source: d:/media/
+        target: /downloads
+      - type: bind
+        source: d:/Github/openvpn-deluge/deluge/bind-mounts/deluge
+        target: /home/user/.config/deluge
+    network_mode: "service:vpn"
+    # deluge shares the network stack of vpn. The service can by reached using
+    # the name of the service as a hostname.
+
+networks:
+  default:
